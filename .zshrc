@@ -18,6 +18,14 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+
 # Do not sent out analytics to brew, sorry!
 export HOMEBREW_NO_ANALYTICS=1
 # And load brew shell environment
@@ -147,9 +155,14 @@ alias newtag='git tag -a'
 ## only uncommment one. Either starship or spaceship!
 
 ## Source the awesome starship.rs prompt
-eval "$(starship init zsh)"
+# eval "$(starship init zsh)"
 
 ## Source the awesome https://spaceship-prompt.sh/ prompt
 #ZSH_THEME="spaceship"
 #autoload -U promptinit; promptinit
 #prompt spaceship
+
+source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
