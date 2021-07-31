@@ -34,6 +34,11 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # ----- Export
 export TERM="xterm-256color"                      # getting proper colors
 export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+export EDITOR="subl"              # $EDITOR use Emacs in terminal
+export VISUAL="subl"           # $VISUAL use Emacs in GUI mode
+
+
+
 
 # ----- ZSH Plugins
 # Install them with homebrew
@@ -149,6 +154,10 @@ alias newtag='git tag -a'
 0url() { curl -F"url=$1" https://envs.sh ; }
 0short() { curl -F"shorten=$1" https://envs.sh ; }
 
+## organize-tool aliases
+export ORGANIZE_CONFIG=~/.config/organize-tool/config.yaml
+alias orgversicherung='organize run --config-file .config/organize-tool/versicherungen.yaml'
+alias orgrun='organize run' # run standard config
 
 # ----- Prompt section
 ## install spaceship and starship through brew first!
