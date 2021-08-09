@@ -108,7 +108,7 @@ alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias ls='ls -alG' # my preferred listing
 alias la='ls -aG'  # all files and dirs
 alias ll='ls -lG'  # long format
-alias lt='ls -aTG' # tree listing
+
 
 ## Changing "ls" to "exa" if available
 if [[ -e /opt/homebrew/bin/exa ]]; then
@@ -147,6 +147,7 @@ alias push='git push origin'
 alias stat='git status'  # 'status' is protected name so using 'stat' instead
 alias tag='git tag'
 alias newtag='git tag -a'
+alias logg='git log --graph --pretty=format:'\''%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'' --abbrev-commit'
 
 ## the NULL pointer of envs.sh
 0file() { curl -F"file=@$1" https://envs.sh ; }
