@@ -38,12 +38,17 @@ export EDITOR="subl"              # $EDITOR use Emacs in terminal
 export VISUAL="subl"           # $VISUAL use Emacs in GUI mode
 
 
-
-
 # ----- ZSH Plugins
 # Install them with homebrew
 # brew install zsh-syntax-highlighting zsh-autosuggestions homebrew/cask-fonts/font-menlo-for-powerline
 #
+# adding more completions to the toolset
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+    autoload -Uz compinit
+    compinit
+fi
 # enable auto-suggestions based on the history
 if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -54,6 +59,7 @@ fi
 if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
+
 
 # ----- Path Section
 if [ -d "$HOME/.bin" ] ;
