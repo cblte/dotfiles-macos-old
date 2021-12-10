@@ -22,16 +22,16 @@ Before you can use these dotfiles, you need to install some tools to make it wor
 
 - zsh-syntax-highlighting 
 - zsh-autosuggestions 
-- font-menlo-for-powerline
-- font-fira-for-powerline
-- font-fira-code-nerd-font
+- homebrew/cask-fonts/font-menlo-for-powerline
+- meslogs nerd font (can be installed via iterm2 when running `p10k configure`
 - exa (an ls replacement)
 - starship.rs prompt
 - or spaceship prompt
 
 ``` Bash
-brew install zsh-syntax-highlighting zsh-autosuggestions font-menlo-for-powerline font-fira-for-powerline font-fira-code-nerd-font
+brew install zsh-syntax-highlighting zsh-autosuggestions
 brew install exa starship spaceship
+brew install romkatv/powerlevel10k/powerlevel10k
 ```
 
 After all tools and plugins are installed, please go to this page for instructions on how to clone the repository: 
