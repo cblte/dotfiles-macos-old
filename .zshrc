@@ -9,7 +9,7 @@
 # My .zshrc config. Not much to see here.
 #
 # This config has been update to work
-# with my macOS Big Sur installation
+# with my macOS Catalina installation
 #
 # Please see README.md for instructions on how to
 # install the used plugins
@@ -18,48 +18,28 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-
-# Do not sent out analytics to brew, sorry!
-export HOMEBREW_NO_ANALYTICS=1
-# And load brew shell environment
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# ----- Export
+# ----- EXPORT
 export TERM="xterm-256color"                      # getting proper colors
 export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
-export EDITOR="subl"              # $EDITOR use Emacs in terminal
-export VISUAL="subl"           # $VISUAL use Emacs in GUI mode
 
 
 # ----- ZSH Plugins
 # Install them with homebrew
 # brew install zsh-syntax-highlighting zsh-autosuggestions homebrew/cask-fonts/font-menlo-for-powerline
 #
-# adding more completions to the toolset
-if type brew &>/dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-    autoload -Uz compinit
-    compinit
-fi
 # enable auto-suggestions based on the history
 if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # change suggestion color
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh    
 fi
 # enable syntax-highlighting
-if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
+#----- Set VI mode
+# Comment this line out to enable default emacs-like bindings
+# bindkey -v
 
 # ----- Path Section
 if [ -d "$HOME/.bin" ] ;
@@ -86,7 +66,7 @@ setopt numericglobsort                                          # Sort filenames
 setopt appendhistory                                            # Immediately append history instead of overwriting
 setopt histignorealldups                                        # If a new command is a duplicate, remove the older one
 setopt inc_append_history                                       # Save commands are added to the history immediately, otherwise only when shell exits.
-# setopt nonomatch                                                # Hide error message if there is no match for the pattern
+#setopt nonomatch                                                # Hide error message if there is no match for the pattern
 setopt notify                                                   # Report the status of background jobs immediately
 
 WORDCHARS=${WORDCHARS//\/[&.;]}                                 # Don't consider certain characters part of the word
@@ -96,7 +76,7 @@ HISTFILE=~/.zhistory
 HISTSIZE=10000
 SAVEHIST=10000
 
-# ----- Alias Section
+# ----- ALIAS Section
 alias vim="nvim"
 alias cp="cp -i"                                                # Confirm before overwriting something
 alias df='df -h'                                                # Human-readable sizes
@@ -114,7 +94,7 @@ alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 alias ls='ls -alG' # my preferred listing
 alias la='ls -aG'  # all files and dirs
 alias ll='ls -lG'  # long format
-
+alias lt='ls -aTG' # tree listing
 
 ## Changing "ls" to "exa" if available
 if [[ -e /opt/homebrew/bin/exa ]]; then
@@ -124,22 +104,22 @@ if [[ -e /opt/homebrew/bin/exa ]]; then
   alias lt='exa -aT --color=always --group-directories-first' # tree listing
 fi
 
-## youtube-dl aliases - keep the space at the end!
-alias yta-aac="youtube-dl --extract-audio --audio-format aac "
-alias yta-best="youtube-dl --extract-audio --audio-format best "
-alias yta-flac="youtube-dl --extract-audio --audio-format flac "
-alias yta-m4a="youtube-dl --extract-audio --audio-format m4a "
-alias yta-mp3="youtube-dl --extract-audio --audio-format mp3 "
-alias yta-opus="youtube-dl --extract-audio --audio-format opus "
-alias yta-vorbis="youtube-dl --extract-audio --audio-format vorbis "
-alias yta-wav="youtube-dl --extract-audio --audio-format wav "
-alias ytv-best="youtube-dl -f best+best "
+## youtube-dl aliases
+alias yta-aac="yt-dlp --extract-audio --audio-format aac "
+alias yta-best="yt-dlp --extract-audio --audio-format best "
+alias yta-flac="yt-dlp --extract-audio --audio-format flac "
+alias yta-m4a="yt-dlp --extract-audio --audio-format m4a "
+alias yta-mp3="yt-dlp --extract-audio --audio-format mp3 "
+alias yta-opus="yt-dlp --extract-audio --audio-format opus "
+alias yta-vorbis="yt-dlp --extract-audio --audio-format vorbis "
+alias yta-wav="yt-dlp --extract-audio --audio-format wav "
+alias ytv-best="yt-dlp -f bestvideo+bestaudio "
 
 ## dotfiles alias
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotfiles='/usr/bin/git --git-dir=/Users/cblte/dotfiles/ --work-tree=/Users/cblte'
 
 ## All things git Stuff
-alias gitu='git add . && git commit && git push'
+alias gitacp='git add . && git commit && git push'
 
 alias addup='git add -u'
 alias addall='git add .'
@@ -153,7 +133,6 @@ alias push='git push origin'
 alias stat='git status'  # 'status' is protected name so using 'stat' instead
 alias tag='git tag'
 alias newtag='git tag -a'
-alias logg='git log --graph --pretty=format:'\''%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'' --abbrev-commit'
 
 ## the NULL pointer of envs.sh
 0file() { curl -F"file=@$1" https://envs.sh ; }
@@ -161,24 +140,63 @@ alias logg='git log --graph --pretty=format:'\''%Cred%h%Creset -%C(yellow)%d%Cre
 0url() { curl -F"url=$1" https://envs.sh ; }
 0short() { curl -F"shorten=$1" https://envs.sh ; }
 
-## organize-tool aliases
-export ORGANIZE_CONFIG=~/.config/organize-tool/config.yaml
-alias orgversicherung='organize run --config-file .config/organize-tool/versicherungen.yaml'
-alias orgrun='organize run' # run standard config
+
+# ----- Function section
+# open manpages in a seperate window
+function xmanpage() { open x-man-page://$@ ; }
+
+### Function extract for common file formats ###
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+function extract {
+ if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+ else
+    for n in "$@"
+    do
+      if [ -f "$n" ] ; then
+          case "${n%,}" in
+            *.cbt|*.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
+                         tar xvf "$n"       ;;
+            *.lzma)      unlzma ./"$n"      ;;
+            *.bz2)       bunzip2 ./"$n"     ;;
+            *.cbr|*.rar)       unrar x -ad ./"$n" ;;
+            *.gz)        gunzip ./"$n"      ;;
+            *.cbz|*.epub|*.zip)       unzip ./"$n"       ;;
+            *.z)         uncompress ./"$n"  ;;
+            *.7z|*.arj|*.cab|*.cb7|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
+                         7z x ./"$n"        ;;
+            *.xz)        unxz ./"$n"        ;;
+            *.exe)       cabextract ./"$n"  ;;
+            *.cpio)      cpio -id < ./"$n"  ;;
+            *.cba|*.ace)      unace x ./"$n"      ;;
+            *)
+                         echo "extract: '$n' - unknown archive method"
+                         return 1
+                         ;;
+          esac
+      else
+          echo "'$n' - file does not exist"
+          return 1
+      fi
+    done
+fi
+}
+
+IFS=$SAVEIFS
+
 
 # ----- Prompt section
 ## install spaceship and starship through brew first!
 ## only uncommment one. Either starship or spaceship!
 
 ## Source the awesome starship.rs prompt
-# eval "$(starship init zsh)"
+eval "$(starship init zsh)"
 
 ## Source the awesome https://spaceship-prompt.sh/ prompt
-#ZSH_THEME="spaceship"
-#autoload -U promptinit; promptinit
-#prompt spaceship
-
-source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# ZSH_THEME="spaceship"
+# autoload -U promptinit; promptinit
+# prompt spaceship
