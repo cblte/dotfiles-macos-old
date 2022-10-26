@@ -200,3 +200,5 @@ eval "$(starship init zsh)"
 # ZSH_THEME="spaceship"
 # autoload -U promptinit; promptinit
 # prompt spaceship
+
+export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
