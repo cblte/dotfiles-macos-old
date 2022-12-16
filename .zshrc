@@ -19,9 +19,11 @@
 [[ $- != *i* ]] && return
 
 # ----- EXPORT
-export TERM="xterm-256color"                      # getting proper colors
+export TERM="xterm-256color" # getting proper colors
 export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 
+# ----- Some Programming stuff
+export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
 
 # ----- ZSH Plugins
 # Install them with homebrew
@@ -29,12 +31,12 @@ export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 #
 # enable auto-suggestions based on the history
 if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh    
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 # enable syntax-highlighting
 if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
-    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 #----- Set VI mode
@@ -42,34 +44,34 @@ fi
 # bindkey -v
 
 # ----- Path Section
-if [ -d "$HOME/.bin" ] ;
-  then PATH="$HOME/.bin:$PATH"
+if [ -d "$HOME/.bin" ]; then
+  PATH="$HOME/.bin:$PATH"
 fi
 
-if [ -d "$HOME/.local/bin" ] ;
-  then PATH="$HOME/.local/bin:$PATH"
+if [ -d "$HOME/.local/bin" ]; then
+  PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ -d "$HOME/Applications" ] ;
-  then PATH="$HOME/Applications:$PATH"
+if [ -d "$HOME/Applications" ]; then
+  PATH="$HOME/Applications:$PATH"
 fi
 
 # ----- Options section
-setopt autocd                                                   # if only directory path is entered, cd there.
-setopt correct                                                  # Auto correct mistakes
-setopt nobeep                                                   # No beep
-setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
-setopt nocaseglob                                               # Case insensitive globbing
+setopt autocd       # if only directory path is entered, cd there.
+setopt correct      # Auto correct mistakes
+setopt nobeep       # No beep
+setopt extendedglob # Extended globbing. Allows using regular expressions with *
+setopt nocaseglob   # Case insensitive globbing
 # setopt rcexpandparam                                            # Array expension with parameters
 # setopt nocheckjobs                                              # Don't warn about running processes when exiting
-setopt numericglobsort                                          # Sort filenames numerically when it makes sense
-setopt appendhistory                                            # Immediately append history instead of overwriting
-setopt histignorealldups                                        # If a new command is a duplicate, remove the older one
-setopt inc_append_history                                       # Save commands are added to the history immediately, otherwise only when shell exits.
+setopt numericglobsort    # Sort filenames numerically when it makes sense
+setopt appendhistory      # Immediately append history instead of overwriting
+setopt histignorealldups  # If a new command is a duplicate, remove the older one
+setopt inc_append_history # Save commands are added to the history immediately, otherwise only when shell exits.
 #setopt nonomatch                                                # Hide error message if there is no match for the pattern
-setopt notify                                                   # Report the status of background jobs immediately
+setopt notify # Report the status of background jobs immediately
 
-WORDCHARS=${WORDCHARS//\/[&.;]}                                 # Don't consider certain characters part of the word
+WORDCHARS=${WORDCHARS//\/[&.;]/} # Don't consider certain characters part of the word
 
 # ----- History Configuration
 HISTFILE=~/.zhistory
@@ -78,9 +80,9 @@ SAVEHIST=10000
 
 # ----- ALIAS Section
 alias vim="nvim"
-alias cp="cp -i"                                                # Confirm before overwriting something
-alias df='df -h'                                                # Human-readable sizes
-alias free='free -m'                                            # Show sizes in MB
+alias cp="cp -i"     # Confirm before overwriting something
+alias df='df -h'     # Human-readable sizes
+alias free='free -m' # Show sizes in MB
 
 ## Get top process eating memory
 alias psmem='ps auxf | sort -nr -k 4'
@@ -130,64 +132,66 @@ alias commit='git commit -m'
 alias fetch='git fetch'
 alias pull='git pull origin'
 alias push='git push origin'
-alias stat='git status'  # 'status' is protected name so using 'stat' instead
+alias stat='git status' # 'status' is protected name so using 'stat' instead
 alias tag='git tag'
 alias newtag='git tag -a'
 
-## the NULL pointer of envs.sh
-0file() { curl -F"file=@$1" https://envs.sh ; }
-0pb() { curl -F"file=@-;" https://envs.sh ; }
-0url() { curl -F"url=$1" https://envs.sh ; }
-0short() { curl -F"shorten=$1" https://envs.sh ; }
+## Random Aliases
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
+## the NULL pointer of envs.sh
+0file() { curl -F"file=@$1" https://envs.sh; }
+0pb() { curl -F"file=@-;" https://envs.sh; }
+0url() { curl -F"url=$1" https://envs.sh; }
+0short() { curl -F"shorten=$1" https://envs.sh; }
 
 # ----- Function section
 # open manpages in a seperate window
-function xmanpage() { open x-man-page://$@ ; }
+function xmanpage() { open x-man-page://$@; }
 
 ### Function extract for common file formats ###
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 
 function extract {
- if [ -z "$1" ]; then
+  if [ -z "$1" ]; then
     # display usage if no parameters given
     echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
     echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
- else
-    for n in "$@"
-    do
-      if [ -f "$n" ] ; then
-          case "${n%,}" in
-            *.cbt|*.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
-                         tar xvf "$n"       ;;
-            *.lzma)      unlzma ./"$n"      ;;
-            *.bz2)       bunzip2 ./"$n"     ;;
-            *.cbr|*.rar)       unrar x -ad ./"$n" ;;
-            *.gz)        gunzip ./"$n"      ;;
-            *.cbz|*.epub|*.zip)       unzip ./"$n"       ;;
-            *.z)         uncompress ./"$n"  ;;
-            *.7z|*.arj|*.cab|*.cb7|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar)
-                         7z x ./"$n"        ;;
-            *.xz)        unxz ./"$n"        ;;
-            *.exe)       cabextract ./"$n"  ;;
-            *.cpio)      cpio -id < ./"$n"  ;;
-            *.cba|*.ace)      unace x ./"$n"      ;;
-            *)
-                         echo "extract: '$n' - unknown archive method"
-                         return 1
-                         ;;
-          esac
-      else
-          echo "'$n' - file does not exist"
+  else
+    for n in "$@"; do
+      if [ -f "$n" ]; then
+        case "${n%,}" in
+        *.cbt | *.tar.bz2 | *.tar.gz | *.tar.xz | *.tbz2 | *.tgz | *.txz | *.tar)
+          tar xvf "$n"
+          ;;
+        *.lzma) unlzma ./"$n" ;;
+        *.bz2) bunzip2 ./"$n" ;;
+        *.cbr | *.rar) unrar x -ad ./"$n" ;;
+        *.gz) gunzip ./"$n" ;;
+        *.cbz | *.epub | *.zip) unzip ./"$n" ;;
+        *.z) uncompress ./"$n" ;;
+        *.7z | *.arj | *.cab | *.cb7 | *.chm | *.deb | *.dmg | *.iso | *.lzh | *.msi | *.pkg | *.rpm | *.udf | *.wim | *.xar)
+          7z x ./"$n"
+          ;;
+        *.xz) unxz ./"$n" ;;
+        *.exe) cabextract ./"$n" ;;
+        *.cpio) cpio -id <./"$n" ;;
+        *.cba | *.ace) unace x ./"$n" ;;
+        *)
+          echo "extract: '$n' - unknown archive method"
           return 1
+          ;;
+        esac
+      else
+        echo "'$n' - file does not exist"
+        return 1
       fi
     done
-fi
+  fi
 }
 
 IFS=$SAVEIFS
-
 
 # ----- Prompt section
 ## install spaceship and starship through brew first!
@@ -202,3 +206,5 @@ eval "$(starship init zsh)"
 # prompt spaceship
 
 export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
+
+source /Users/cblte/.docker/init-zsh.sh || true # Added by Docker Desktop
